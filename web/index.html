@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BenzCloud – Micro-Enterprise Suite</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo-icon">☁️</div>
+      <div class="logo-text">
+        <span class="brand-title">BenzCloud</span>
+        <span class="brand-badge">v1.0</span>
+      </div>
+      <span class="domain-pill" id="headerDomainPill">intern</span>
+    </div>
+    <div class="header-right">
+      <div class="lang-switcher">
+        <button id="langDE" class="btn-lang active" onclick="setLanguage('de')">DE</button>
+        <button id="langEN" class="btn-lang" onclick="setLanguage('en')">EN</button>
+      </div>
+      <button class="btn-sm btn-outline" id="btnLogout" onclick="logout()" style="display:none;" data-i18n="logout">Abmelden</button>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <!-- SETUP WIZARD (Visible when system not yet configured) -->
+    <div id="setupWizard" class="view-panel" style="display: none;">
+      <div class="wizard-card">
+        <div class="wizard-badge" data-i18n="setup_badge">✨ One-Click Ersteinrichtung</div>
+        <h1 class="wizard-title" data-i18n="setup_title">Willkommen bei BenzCloud</h1>
+        <p class="wizard-desc" data-i18n="setup_desc">Deine datenschutzfreundliche, lokale Enterprise-Suite. Trage deine Wunsch-Domain ein – Mesh-VPN, DNS-Server und Routing konfigurieren sich vollautomatisch ohne Router-Portfreigaben.</p>
+        
+        <form id="setupForm" onsubmit="submitSetup(event)" class="wizard-form">
+          <div class="form-group">
+            <label for="setupDomain" data-i18n="lbl_domain">Wunsch-Domain (Basis für System & Dienste):</label>
+            <div class="input-with-hint">
+              <input type="text" id="setupDomain" required placeholder="z. B. benzjeremy.de oder intern" value="benzjeremy.de">
+              <small class="form-hint" data-i18n="hint_domain">Subdomains wie vpn, drive und mail werden automatisch erzeugt.</small>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="setupAdminUser" data-i18n="lbl_admin_user">Administrator-Benutzername:</label>
+              <input type="text" id="setupAdminUser" required placeholder="admin" value="admin">
+            </div>
+            <div class="form-group">
+              <label for="setupAdminPass" data-i18n="lbl_admin_pass">Administrator-Passwort (mind. 8 Zeichen):</label>
+              <input type="password" id="setupAdminPass" required placeholder="••••••••" minlength="8">
+            </div>
+          </div>
+
+          <div class="wizard-security-notice">
+            <span class="sec-icon">🔒</span>
+            <div>
+              <strong data-i18n="sec_title">Zero-Dummy-Security ab Werk:</strong>
+              <p data-i18n="sec_desc">PBKDF2 Schlüsselableitung (100.000 Runden), AES-256-GCM Verschlüsselung at Rest und gegenseitig authentifiziertes Slack Nebula P2P-Mesh.</p>
+            </div>
+          </div>
+
+          <button type="submit" class="btn-primary btn-lg" id="btnSubmitSetup" data-i18n="btn_start_setup">
+            🚀 BenzCloud jetzt automatisch einrichten
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- LOGIN MODAL / VIEW (When setup is done but not authenticated) -->
+    <div id="loginView" class="view-panel" style="display: none;">
+      <div class="auth-card">
+        <h2 data-i18n="login_title">BenzCloud Anmeldung</h2>
+        <p class="text-muted" data-i18n="login_desc">Melde dich mit deinem Konto an, um auf das Cockpit und deine Dienste zuzugreifen.</p>
+        <form id="loginForm" onsubmit="submitLogin(event)">
+          <div class="form-group">
+            <label for="loginUser" data-i18n="lbl_username">Benutzername:</label>
+            <input type="text" id="loginUser" required placeholder="admin">
+          </div>
+          <div class="form-group">
+            <label for="loginPass" data-i18n="lbl_password">Passwort:</label>
+            <input type="password" id="loginPass" required placeholder="••••••••">
+          </div>
+          <button type="submit" class="btn-primary btn-block" data-i18n="btn_login">Anmelden</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- MAIN DASHBOARD -->
+    <div id="dashboardView" class="view-panel" style="display: none;">
+      <!-- System Metrics Banner -->
+      <section class="metrics-grid">
+        <div class="metric-card">
+          <div class="m-label" data-i18n="m_domain">Basis-Domain</div>
+          <div class="m-value" id="mDomain">-</div>
+          <div class="m-sub" id="mLocalIP">LAN: -</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-label" data-i18n="m_vpn">Mesh-VPN (Nebula)</div>
+          <div class="m-value text-green" id="mVPNStatus"><span class="pulse-dot"></span> Aktiv</div>
+          <div class="m-sub" id="mVPNIP">Overlay IP: 10.42.0.1</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-label" data-i18n="m_dns">Custom DNS Server</div>
+          <div class="m-value text-blue" id="mDNSStatus">RFC 1035</div>
+          <div class="m-sub" id="mDNSPort">Port 53 (UDP & TCP)</div>
+        </div>
+        <div class="metric-card">
+          <div class="m-label" data-i18n="m_peers">Verbundene Peers</div>
+          <div class="m-value" id="mPeers">0</div>
+          <div class="m-sub" data-i18n="m_peers_sub">P2P Mesh Nodes</div>
+        </div>
+      </section>
+
+      <!-- Navigation Tabs -->
+      <nav class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('overview')" data-i18n="tab_overview">🧭 Schnellstart</button>
+        <button class="tab-btn" onclick="switchTab('drive')" data-i18n="tab_drive">📁 Drive (Cloud-Dateien)</button>
+        <button class="tab-btn" onclick="switchTab('vpn')" data-i18n="tab_vpn">🛡️ Mesh-VPN & Peers</button>
+        <button class="tab-btn" onclick="switchTab('dns')" data-i18n="tab_dns">🌐 DNS & Routing</button>
+        <button class="tab-btn" onclick="switchTab('plugins')" data-i18n="tab_plugins">🧩 Plugins</button>
+        <button class="tab-btn" id="tabBtnUsers" onclick="switchTab('users')" data-i18n="tab_users">👥 Benutzerverwaltung</button>
+      </nav>
+
+      <!-- TAB CONTENT: OVERVIEW -->
+      <div id="tabContent_overview" class="tab-pane active">
+        <h2 data-i18n="services_title">Verfügbare Enterprise-Dienste</h2>
+        <div class="services-grid">
+          <a class="service-card" id="linkDrive" href="#" target="_blank">
+            <div class="s-icon">📁</div>
+            <div class="s-info">
+              <h3 data-i18n="srv_drive">BenzCloud Drive</h3>
+              <p class="s-url" id="urlDrive">http://drive.domain</p>
+              <p class="s-desc" data-i18n="srv_drive_desc">Verschlüsselter Dateispeicher, Dokumentenablage & Dateifreigabe (Nextcloud-Alternative).</p>
+            </div>
+          </a>
+          <a class="service-card" id="linkMail" href="#" target="_blank">
+            <div class="s-icon">📧</div>
+            <div class="s-info">
+              <h3 data-i18n="srv_mail">BenzCloud Mail</h3>
+              <p class="s-url" id="urlMail">http://mail.domain</p>
+              <p class="s-desc" data-i18n="srv_mail_desc">Geschlossenes internes E-Mail-System (SMTP/IMAP) mit integrierter Webmail-Oberfläche.</p>
+            </div>
+          </a>
+          <a class="service-card" id="linkChat" href="#" target="_blank">
+            <div class="s-icon">💬</div>
+            <div class="s-info">
+              <h3 data-i18n="srv_chat">BenzCloud Chat</h3>
+              <p class="s-url" id="urlChat">http://chat.domain</p>
+              <p class="s-desc" data-i18n="srv_chat_desc">Echtzeit-Team-Chat (Slack/Teams-Alternative) für verschlüsselte Kommunikation.</p>
+            </div>
+          </a>
+          <a class="service-card" id="linkWeb" href="#" target="_blank">
+            <div class="s-icon">🌐</div>
+            <div class="s-info">
+              <h3 data-i18n="srv_web">Web-Hosting Engine</h3>
+              <p class="s-url" id="urlWeb">http://*.domain</p>
+              <p class="s-desc" data-i18n="srv_web_desc">Eigene Webseiten unter frei wählbaren Subdomains (HTML, PHP, Astro).</p>
+            </div>
+          </a>
+        </div>
+
+        <div class="pairing-box">
+          <div class="pairing-header">
+            <span class="pair-icon">📱</span>
+            <div>
+              <h3 data-i18n="pair_title">Client-Kopplung (Android & PC)</h3>
+              <p data-i18n="pair_desc">Verbinde die Client-App einmalig über die lokale Server-IP. Danach läuft die gesamte Kommunikation automatisch verschlüsselt über das Mesh-VPN und den Custom-DNS.</p>
+            </div>
+          </div>
+          <div class="pairing-details">
+            <div class="p-item">
+              <strong data-i18n="pair_server_endpoint">Server LAN-Kopplungs-Endpunkt:</strong>
+              <code id="pairEndpoint">http://192.168.0.5:8080/api/pair</code>
+            </div>
+            <div class="p-item">
+              <strong data-i18n="pair_cli_cmd">Verbindungsbefehl (BenzCloud-Client CLI):</strong>
+              <code id="pairCliCmd">benzcloud-client pair -server http://192.168.0.5:8080 -user admin</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB CONTENT: DRIVE -->
+      <div id="tabContent_drive" class="tab-pane">
+        <div class="drive-header">
+          <h2 data-i18n="drive_vault_title">Verschlüsselter Dateispeicher (AES-256-GCM)</h2>
+          <div class="drive-actions">
+            <input type="file" id="fileUploadInput" onchange="uploadSelectedFile()" style="display:none;">
+            <button class="btn-primary" onclick="document.getElementById('fileUploadInput').click()" data-i18n="btn_upload">⬆️ Datei hochladen</button>
+            <button class="btn-secondary" onclick="promptNewFolder()" data-i18n="btn_new_folder">📁 Neuer Ordner</button>
+          </div>
+        </div>
+        <div class="file-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_name">Name</th>
+                <th data-i18n="th_size">Größe</th>
+                <th data-i18n="th_date">Änderungsdatum</th>
+                <th data-i18n="th_actions">Aktionen</th>
+              </tr>
+            </thead>
+            <tbody id="fileTableBody">
+              <tr><td colspan="4" class="text-center" data-i18n="loading_files">Lade Dateien...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB CONTENT: VPN -->
+      <div id="tabContent_vpn" class="tab-pane">
+        <h2 data-i18n="vpn_title">Slack Nebula Mesh-VPN & Peer-Topologie</h2>
+        <p class="text-muted" data-i18n="vpn_desc">Das P2P Mesh-Overlay verbindet alle autorisierten Endgeräte verschlüsselt ohne Portweiterleitungen am Router.</p>
+        <div class="peer-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_peer_name">Node / Peer Name</th>
+                <th data-i18n="th_overlay_ip">Overlay IP</th>
+                <th data-i18n="th_role">Rolle</th>
+                <th data-i18n="th_status">Status</th>
+                <th data-i18n="th_valid_until">Zertifikat gültig bis</th>
+              </tr>
+            </thead>
+            <tbody id="peerTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB CONTENT: DNS -->
+      <div id="tabContent_dns" class="tab-pane">
+        <h2 data-i18n="dns_title">Custom DNS Server & Subdomain-Routing</h2>
+        <div class="dns-grid">
+          <div class="dns-card">
+            <h3 data-i18n="dns_records_title">Autoritative System-Subdomains</h3>
+            <div id="dnsRecordsList" class="records-list"></div>
+          </div>
+          <div class="dns-card">
+            <h3 data-i18n="dns_logs_title">Live DNS-Abfragen (RFC 1035)</h3>
+            <div id="dnsLogsList" class="logs-list"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB CONTENT: PLUGINS -->
+      <div id="tabContent_plugins" class="tab-pane">
+        <h2 data-i18n="plugins_title">Modulare Enterprise-Plugins</h2>
+        <p class="text-muted" data-i18n="plugins_desc">Der Server orchestriert Module in getrennten Prozessen über token-gesicherte Schnittstellen.</p>
+        <div id="pluginCardsGrid" class="plugins-grid"></div>
+      </div>
+
+      <!-- TAB CONTENT: USERS -->
+      <div id="tabContent_users" class="tab-pane">
+        <div class="users-header">
+          <h2 data-i18n="users_title">Benutzer- und Rechteverwaltung</h2>
+          <button class="btn-primary" onclick="openCreateUserModal()" data-i18n="btn_create_user">➕ Neuer Benutzer</button>
+        </div>
+        <div class="users-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th data-i18n="th_user">Benutzer</th>
+                <th data-i18n="th_overlay_ip">Overlay IP</th>
+                <th data-i18n="th_perms">Berechtigungen</th>
+                <th data-i18n="th_base_perms">Basis-Privilegien (Fixiert)</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- CREATE USER MODAL -->
+  <div id="createUserModal" class="modal-backdrop" style="display:none;">
+    <div class="modal-card">
+      <h3 data-i18n="modal_create_user_title">Neuen Benutzer anlegen</h3>
+      <form id="createUserForm" onsubmit="submitCreateUser(event)">
+        <div class="form-group">
+          <label data-i18n="lbl_username">Benutzername:</label>
+          <input type="text" id="newUsername" required placeholder="z. B. emil">
+        </div>
+        <div class="form-group">
+          <label data-i18n="lbl_password">Passwort:</label>
+          <input type="password" id="newPassword" required placeholder="••••••••" minlength="8">
+        </div>
+        <div class="perms-group">
+          <label class="check-label"><input type="checkbox" id="permDrive" checked> Drive (Cloud-Dateien)</label>
+          <label class="check-label"><input type="checkbox" id="permMail" checked> Mail (E-Mail)</label>
+          <label class="check-label"><input type="checkbox" id="permChat" checked> Chat (Team-Chat)</label>
+          <label class="check-label"><input type="checkbox" id="permWeb" checked> Web (Web-Hosting)</label>
+        </div>
+        <div class="immutable-perms-notice">
+          <span class="badge-lock">🔒</span>
+          <span data-i18n="immutable_perms_text"><strong>VPN & DNS</strong> sind unveränderlich aktiv und können nicht entzogen werden.</span>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" onclick="closeCreateUserModal()" data-i18n="btn_cancel">Abbrechen</button>
+          <button type="submit" class="btn-primary" data-i18n="btn_save">Erstellen</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <span>BenzCloud © 2026 Jeremy Benz • GNU GPLv3 Lizenz • Nebula (MIT)</span>
+      <span class="pre-release-pill" data-i18n="pre_release_pill">Pre-Release / In aktiver Entwicklung</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

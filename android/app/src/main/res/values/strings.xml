@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BenzCloud Server</string>
+    <string name="server_running">BenzCloud Server Daemon aktiv</string>
+    <string name="server_desc">Mesh-VPN (Nebula) &amp; Custom-DNS Server laufen im Hintergrund</string>
+</resources>
