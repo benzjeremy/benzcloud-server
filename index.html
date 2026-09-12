@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BenzCloud Server · Autonome, datenschutzfreundliche Cloud-Suite in Go</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Header -->
+  <header class="site-header">
+    <div class="nav-container">
+      <div class="nav-left">
+        <a href="https://benzjeremy.github.io/" class="back-root-btn">
+          <span>← benzjeremy.github.io</span>
+        </a>
+        <a href="index.html" class="brand-link">
+          <span class="brand-logo">☁️</span>
+          <span class="brand-name">BenzCloud Server</span>
+          <span class="brand-ver">v1.0</span>
+        </a>
+      </div>
+
+      <nav class="main-nav">
+        <a href="app/">
+          <span class="lang-de">Web-Cockpit</span>
+          <span class="lang-en" style="display:none;">Web Cockpit</span>
+        </a>
+        <a href="#features">
+          <span class="lang-de">Features</span>
+          <span class="lang-en" style="display:none;">Features</span>
+        </a>
+        <a href="#architektur">
+          <span class="lang-de">Architektur</span>
+          <span class="lang-en" style="display:none;">Architecture</span>
+        </a>
+        <a href="#downloads">
+          <span class="lang-de">Downloads</span>
+          <span class="lang-en" style="display:none;">Downloads</span>
+        </a>
+        <a href="#about">
+          <span class="lang-de">Über das Projekt</span>
+          <span class="lang-en" style="display:none;">About</span>
+        </a>
+
+        <div class="lang-switch" role="group" aria-label="Sprachauswahl">
+          <button type="button" class="lang-btn active" id="btn-lang-de" onclick="setLang('de')">DE</button>
+          <button type="button" class="lang-btn" id="btn-lang-en" onclick="setLang('en')">EN</button>
+        </div>
+
+        <a href="https://github.com/benzjeremy/benzcloud-server" target="_blank" rel="noopener noreferrer" class="btn-github">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
+          <span>GitHub</span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="badge-pill">
+      <span>🛡️</span>
+      <span class="lang-de">Souveräne Lokale Cloud · 100% Datenschutz</span>
+      <span class="lang-en" style="display:none;">Sovereign Local Cloud · 100% Privacy</span>
+    </div>
+    <h1 class="hero-title">
+      <span class="lang-de">Private Enterprise-Suite <span>ohne Cloud-Zwang</span></span>
+      <span class="lang-en" style="display:none;">Private Enterprise Suite <span>Without Cloud Lock-in</span></span>
+    </h1>
+    <p class="hero-subtitle">
+      <span class="lang-de">Die schlanke Open-Source-Alternative zu Nextcloud und Microsoft 365 komplett in reinem Go. Vollautomatisches Mesh-VPN ohne Router-Portfreigaben, eigener DNS-Server, AES-256-GCM Dateitresor und modulare Plugins für Web, Mail und Chat.</span>
+      <span class="lang-en" style="display:none;">The lightweight open-source alternative to Nextcloud and Microsoft 365 written entirely in pure Go. Autonomous Mesh-VPN without router port forwarding, embedded DNS server, AES-256-GCM file vault, and modular plugins for Web, Mail, and Chat.</span>
+    </p>
+    <div class="hero-cta">
+      <a href="app/" class="btn-primary">
+        <span class="lang-de">🚀 Live Web-Cockpit öffnen</span>
+        <span class="lang-en" style="display:none;">🚀 Open Live Web Cockpit</span>
+      </a>
+      <a href="#downloads" class="btn-secondary">
+        <span class="lang-de">📥 Downloads (PC & Android)</span>
+        <span class="lang-en" style="display:none;">📥 Downloads (PC & Android)</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="section" id="features">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="lang-de">Leistungsstarke Kernfeatures</span>
+        <span class="lang-en" style="display:none;">Powerful Core Features</span>
+      </h2>
+      <p class="section-desc">
+        <span class="lang-de">Entwickelt für maximale Einfachheit, Zero-Telemetry und vollständige Datenhoheit auf Ihren eigenen Geräten.</span>
+        <span class="lang-en" style="display:none;">Engineered for zero friction, zero telemetry, and complete data ownership on your own devices.</span>
+      </p>
+    </div>
+
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-icon">🌐</div>
+        <h3 class="card-title">
+          <span class="lang-de">Slack Nebula Mesh-VPN</span>
+          <span class="lang-en" style="display:none;">Slack Nebula Mesh VPN</span>
+        </h3>
+        <p class="card-desc">
+          <span class="lang-de">Sichere Peer-to-Peer-Verschlüsselung via Noise-Protokoll. Funktioniert out-of-the-box hinter restriktiven Firewalls und NATs – ganz ohne Router-Portfreigaben.</span>
+          <span class="lang-en" style="display:none;">Encrypted peer-to-peer mesh networking powered by the Noise Protocol. Connects seamlessly behind strict NATs and firewalls without opening router ports.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🧭</div>
+        <h3 class="card-title">
+          <span class="lang-de">Integrierter DNS-Server</span>
+          <span class="lang-en" style="display:none;">Embedded RFC 1035 DNS</span>
+        </h3>
+        <p class="card-desc">
+          <span class="lang-de">Eigener DNS-Daemon auf Port 53 (mit automatischem unprivilegiertem Fallback). Löst Wunschdomains und Subdomains wie <code>drive.domain</code> oder <code>chat.domain</code> intern auf.</span>
+          <span class="lang-en" style="display:none;">Built-in DNS daemon on port 53 (with automatic non-root fallback). Maps custom domains and subdomains like <code>drive.domain</code> or <code>chat.domain</code> locally.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🔐</div>
+        <h3 class="card-title">
+          <span class="lang-de">Zero-Dummy-Security</span>
+          <span class="lang-en" style="display:none;">Zero-Dummy Security</span>
+        </h3>
+        <p class="card-desc">
+          <span class="lang-de">Kryptografisch kompromisslos: AES-256-GCM, PBKDF2 mit 100.000 Runden, 32-Byte CSPRNG-Sitzungstokens und unentziehbare Mesh-VPN-Rechte für alle Benutzer.</span>
+          <span class="lang-en" style="display:none;">Cryptographically uncompromising: AES-256-GCM authenticated encryption, PBKDF2 with 100,000 iterations, 32-byte CSPRNG tokens, and immutable VPN privileges.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📂</div>
+        <h3 class="card-title">
+          <span class="lang-de">Verschlüsselter Dateitresor</span>
+          <span class="lang-en" style="display:none;">Encrypted File Vault</span>
+        </h3>
+        <p class="card-desc">
+          <span class="lang-de">Lokaler Cloud-Speicher mit Versionshistorie, Dateiuploads, Ordnerstrukturen und End-to-End-Verschlüsselung auf Blockebene.</span>
+          <span class="lang-en" style="display:none;">Private cloud storage featuring versioning, direct file uploads, folder hierarchies, and block-level cryptographic storage.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🧩</div>
+        <h3 class="card-title">
+          <span class="lang-de">Plugin-Ökosystem</span>
+          <span class="lang-en" style="display:none;">Plugin Ecosystem</span>
+        </h3>
+        <p class="card-desc">
+          <span class="lang-de">Modulare Erweiterbarkeit durch autonome Plugins: Webhosting (Astro/PHP), E-Mail (SMTP/IMAP) und Echtzeit-Chat mit automatischer Discovery via IPC.</span>
+          <span class="lang-en" style="display:none;">Modular architecture with autonomous plugins: Web hosting (Astro/PHP), Email (SMTP/IMAP), and real-time Chat with auto-discovery over local IPC.</span>
+        </p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📱</div>
+        <h3 class="card-title">
+          <span class="lang-de">Multi-Plattform</span>
+          <span class="lang-en" style="display:none;">Multi-Platform</span>
+        </h3>
+        <p class="card-desc">
+          <span class="lang-de">Single-Binary-Ausführung auf Linux und Windows sowie eine schlanke native Android-Server-App (ohne Gradle- oder JAR-Ballast, direkt kompiliert).</span>
+          <span class="lang-en" style="display:none;">Single-binary deployments for Linux and Windows alongside a lightweight native Android server application without build bloat.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Architecture Section -->
+  <section class="section" id="architektur">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="lang-de">Technische Architektur</span>
+        <span class="lang-en" style="display:none;">Technical Architecture</span>
+      </h2>
+      <p class="section-desc">
+        <span class="lang-de">Modulare Komponentenarchitektur mit Go-Kern, SQLite-Persistenz und dezentraler P2P-Koordination.</span>
+        <span class="lang-en" style="display:none;">Modular component architecture powered by Go, SQLite persistence, and decentralized peer coordination.</span>
+      </p>
+    </div>
+
+    <div class="arch-card">
+      <h3 style="font-size: 1.3rem; margin-bottom: 1rem; color: var(--accent-primary);">
+        <span class="lang-de">Systemschichten & Datenfluss</span>
+        <span class="lang-en" style="display:none;">System Layers & Data Flow</span>
+      </h3>
+      <div class="arch-grid">
+        <div class="arch-item">
+          <h4>Mesh VPN Core</h4>
+          <p>
+            <span class="lang-de">Slack Nebula Lighthouse- und Node-Konfiguratoren, CA-Zertifikatsausstellung und Peer-Erkennung ohne zentrale Server.</span>
+            <span class="lang-en" style="display:none;">Slack Nebula Lighthouse and node orchestrator, CA issuance, and peer discovery without centralized intermediaries.</span>
+          </p>
+        </div>
+        <div class="arch-item">
+          <h4>RFC 1035 DNS Daemon</h4>
+          <p>
+            <span class="lang-de">UDP/TCP Port 53 Handler für Mesh-Subdomains. Automatischer Fallback auf 5353 bei unprivilegierten Umgebungen.</span>
+            <span class="lang-en" style="display:none;">UDP/TCP Port 53 handler resolving mesh subdomains. Seamless 5353 fallback when running without root privileges.</span>
+          </p>
+        </div>
+        <div class="arch-item">
+          <h4>Vhost Reverse Proxy</h4>
+          <p>
+            <span class="lang-de">Dynamisches Routing eingehender HTTP-Anfragen basierend auf Host-Headern an die jeweiligen Subdienste und Plugins.</span>
+            <span class="lang-en" style="display:none;">Dynamic reverse proxy routing inbound HTTP requests by Host header to matching internal subsystems and plugins.</span>
+          </p>
+        </div>
+        <div class="arch-item">
+          <h4>Plugin IPC Supervisor</h4>
+          <p>
+            <span class="lang-de">Überwacht externe Plugin-Prozesse, fragt periodisch <code>/health</code> Endpunkte ab und aktualisiert DNS-Routing-Einträge.</span>
+            <span class="lang-en" style="display:none;">Monitors plugin child processes, periodically checks <code>/health</code> endpoints, and synchronizes DNS routing maps.</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Downloads Section -->
+  <section class="section" id="downloads">
+    <div class="section-header">
+      <h2 class="section-title">
+        <span class="lang-de">Pakete & Downloads</span>
+        <span class="lang-en" style="display:none;">Packages & Downloads</span>
+      </h2>
+      <p class="section-desc">
+        <span class="lang-de">Alle offiziellen Builds für Linux, Windows und Android. Kryptografisch verifiziert über SHA-256 Prüfsummen.</span>
+        <span class="lang-en" style="display:none;">Official verified binaries for Linux, Windows, and Android with cryptographic SHA-256 integrity verification.</span>
+      </p>
+    </div>
+
+    <div class="download-grid">
+      <div class="download-card">
+        <div class="download-icon">🐧</div>
+        <div class="download-title">Linux x86_64</div>
+        <div class="download-meta">Single Binary · ~12.7 MB</div>
+        <a href="https://raw.githubusercontent.com/benzjeremy/benzstore/content/linux/benzcloud-server/benzcloud-server_1.0" class="btn-download">
+          <span class="lang-de">Binary herunterladen</span>
+          <span class="lang-en" style="display:none;">Download Binary</span>
+        </a>
+      </div>
+
+      <div class="download-card">
+        <div class="download-icon">🪟</div>
+        <div class="download-title">Windows x86_64</div>
+        <div class="download-meta">Native Executable · ~13.2 MB</div>
+        <a href="https://raw.githubusercontent.com/benzjeremy/benzstore/content/windows/benzcloud-server/benzcloud-server_1.0.exe" class="btn-download">
+          <span class="lang-de">.exe herunterladen</span>
+          <span class="lang-en" style="display:none;">Download .exe</span>
+        </a>
+      </div>
+
+      <div class="download-card">
+        <div class="download-icon">🤖</div>
+        <div class="download-title">Android APK</div>
+        <div class="download-meta">Signed APK · ~17 KB</div>
+        <a href="https://raw.githubusercontent.com/benzjeremy/benzstore/content/android/benzcloud-server/benzcloud-server_1.0.apk" class="btn-download">
+          <span class="lang-de">APK herunterladen</span>
+          <span class="lang-en" style="display:none;">Download APK</span>
+        </a>
+      </div>
+
+      <div class="download-card">
+        <div class="download-icon">🏪</div>
+        <div class="download-title">BenzStore</div>
+        <div class="download-meta">One-Click Install & Updates</div>
+        <a href="https://benzjeremy.github.io/benzstore/" class="btn-download" style="background-color: var(--accent-primary); color: #000;">
+          <span class="lang-de">Im BenzStore öffnen</span>
+          <span class="lang-en" style="display:none;">Open in BenzStore</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About & Open Source Section -->
+  <section class="section" id="about">
+    <div class="about-box">
+      <div class="about-header">
+        <img src="https://github.com/benzjeremy.png" alt="Jeremy Benz" class="author-avatar">
+        <div class="author-info">
+          <h3>Jeremy Benz (@benzjeremy)</h3>
+          <p>
+            <span class="lang-de">Open-Source-Entwickler & Architekt souveräner Software-Ökosysteme</span>
+            <span class="lang-en" style="display:none;">Open-Source Developer & Architect of Sovereign Software Ecosystems</span>
+          </p>
+        </div>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.95rem; line-height: 1.6;">
+        <span class="lang-de">BenzCloud wurde geschaffen, um Organisationen und Privatanwendern echte digitale Souveränität zurückzugeben. Keine Telemetrie, keine versteckten Cloud-Abhängigkeiten und kein Tracking. Der Quellcode ist vollständig transparent unter der GNU General Public License v3.0 (GPL-3.0) lizenziert.</span>
+        <span class="lang-en" style="display:none;">BenzCloud was created to restore genuine digital sovereignty to individuals and organizations. Free from telemetry, hidden cloud subscriptions, and surveillance capitalism. The codebase is licensed under the GNU General Public License v3.0 (GPL-3.0).</span>
+      </p>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="https://github.com/benzjeremy/benzcloud-server/blob/main/LICENSE" target="_blank" rel="noopener noreferrer" style="color: var(--accent-primary); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+          ⚖️ GNU GPLv3 Lizenz
+        </a>
+        <a href="https://github.com/benzjeremy/benzcloud-server" target="_blank" rel="noopener noreferrer" style="color: var(--accent-primary); text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+          📦 GitHub Repository
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div>
+        © 2026 Jeremy Benz · BenzCloud Ecosystem · GNU GPLv3
+      </div>
+      <div class="footer-links">
+        <a href="https://benzjeremy.github.io/impressum.html">
+          <span class="lang-de">Impressum</span>
+          <span class="lang-en" style="display:none;">Legal Notice</span>
+        </a>
+        <a href="https://benzjeremy.github.io/datenschutz.html">
+          <span class="lang-de">Datenschutz</span>
+          <span class="lang-en" style="display:none;">Privacy Policy</span>
+        </a>
+        <a href="https://benzjeremy.github.io/">
+          <span class="lang-de">Hauptseite</span>
+          <span class="lang-en" style="display:none;">Main Hub</span>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function setLang(lang) {
+      localStorage.setItem('benzcloud_lang', lang);
+      document.documentElement.lang = lang;
+
+      const isDe = lang === 'de';
+      document.querySelectorAll('.lang-de').forEach(el => el.style.display = isDe ? '' : 'none');
+      document.querySelectorAll('.lang-en').forEach(el => el.style.display = isDe ? 'none' : '');
+
+      const btnDe = document.getElementById('btn-lang-de');
+      const btnEn = document.getElementById('btn-lang-en');
+      if (btnDe && btnEn) {
+        btnDe.classList.toggle('active', isDe);
+        btnEn.classList.toggle('active', !isDe);
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedLang = localStorage.getItem('benzcloud_lang') || 'de';
+      setLang(savedLang);
+    });
+  </script>
+</body>
+</html>
