@@ -93,6 +93,7 @@ import (
 func init() {
 	_ = os.Setenv("WEBKIT_DISABLE_DMABUF_RENDERER", "1")
 	_ = os.Setenv("WEBKIT_FORCE_COMPOSITING_MODE", "1")
+	_ = os.Setenv("JSC_SIGNAL_FOR_GC", "SIGUSR2")
 }
 
 // installDesktopIntegration automatically installs icons and desktop file into user's XDG directories

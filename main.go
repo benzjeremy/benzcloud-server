@@ -104,12 +104,20 @@ func main() {
 	// 4. DNS Server
 	dnsSrv := dns.NewServer(cfg.BaseDomain, cfg.ServerVPNIP, cfg.DNSPort)
 	if err := dnsSrv.Start(); err != nil {
-		log.Printf("[BenzCloud DNS] Notice: Port %d bind notice (%v). Starting fallback DNS on port 5353...\n", cfg.DNSPort, err)
-		dnsSrv = dns.NewServer(cfg.BaseDomain, cfg.ServerVPNIP, 5353)
-		if err := dnsSrv.Start(); err != nil {
-			log.Printf("[BenzCloud DNS] Fallback notice: %v\n", err)
-		} else {
-			cfg.DNSPort = 5353
+		log.Printf("[BenzCloud DNS] Notice: Port %d requires root/CAP_NET_BIND_SERVICE (%v). Trying unprivileged fallback port...\n", cfg.DNSPort, err)
+		fallbackPorts := []int{1053, 5354, 8053}
+		started := false
+		for _, fbPort := range fallbackPorts {
+			candidate := dns.NewServer(cfg.BaseDomain, cfg.ServerVPNIP, fbPort)
+			if err := candidate.Start(); err == nil {
+				dnsSrv = candidate
+				cfg.DNSPort = fbPort
+				started = true
+				break
+			}
+		}
+		if !started {
+			log.Printf("[BenzCloud DNS] Warning: Could not bind fallback DNS server. Local DNS resolution will be disabled.\n")
 		}
 	}
 
