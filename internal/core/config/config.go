@@ -14,7 +14,7 @@ import (
 type Config struct {
 	BaseDomain     string `json:"base_domain"`     // e.g. benzjeremy.de or intern
 	ServerLocalIP  string `json:"server_local_ip"` // LAN IP, e.g. 192.168.0.5
-	HTTPPort       int    `json:"http_port"`       // default 8080
+	HTTPPort       int    `json:"http_port"`       // default 80
 	DNSPort        int    `json:"dns_port"`        // default 53 (or 5353 fallback)
 	VPNPort        int    `json:"vpn_port"`        // default 4242 (UDP)
 	OverlaySubnet  string `json:"overlay_subnet"`  // e.g. 10.42.0.0/16
@@ -34,7 +34,7 @@ func DefaultConfig(dataDir string) *Config {
 	return &Config{
 		BaseDomain:     "intern",
 		ServerLocalIP:  localIP,
-		HTTPPort:       8080,
+		HTTPPort:       80,
 		DNSPort:        53,
 		VPNPort:        4242,
 		OverlaySubnet:  "10.42.0.0/16",

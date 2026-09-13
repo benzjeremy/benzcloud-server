@@ -40,11 +40,12 @@ func main() {
 		versionFlag bool
 	)
 
-	flag.IntVar(&portFlag, "port", 8080, "HTTP server port (default 8080)")
+	flag.IntVar(&portFlag, "port", 80, "HTTP server port (default 80)")
 	flag.IntVar(&dnsPortFlag, "dns-port", 53, "DNS server port (default 53)")
 	flag.StringVar(&dataDirFlag, "data", "", "Data directory for configs, files, and certificates")
 	flag.StringVar(&domainFlag, "domain", "", "Base domain override")
 	flag.BoolVar(&daemonFlag, "daemon", false, "Run in background daemon mode without desktop window")
+	flag.BoolVar(&guiFlag, "gui", false, "Launch GUI window (default: headless)")
 	flag.BoolVar(&versionFlag, "version", false, "Print version and exit")
 	flag.Parse()
 
@@ -71,7 +72,7 @@ func main() {
 	if err != nil && err != config.ErrNotConfigured {
 		log.Fatalf("Fatal: failed to load config: %v\n", err)
 	}
-	if portFlag != 8080 {
+	if portFlag != 80 {
 		cfg.HTTPPort = portFlag
 	}
 	if dnsPortFlag != 53 {
@@ -162,7 +163,7 @@ func main() {
 	router := proxy.NewRouter(cfg.BaseDomain, cfg.ServerLocalIP, cfg.ServerToken, pluginMgr, mainMux, driveMux)
 
 	httpServer := &http.Server{
-		Addr:         fmt.Sprintf("0.0.0.0:%d", cfg.HTTPPort),
+		Addr:         fmt.Sprintf("127.0.0.1:%d", cfg.HTTPPort),
 		Handler:      router,
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
@@ -179,8 +180,8 @@ func main() {
 
 	appURL := fmt.Sprintf("http://127.0.0.1:%d", cfg.HTTPPort)
 
-	// If interactive desktop mode
-	if !daemonFlag && os.Getenv("DISPLAY") != "" && os.Getenv("HEADLESS") != "1" {
+	// Launch GUI only if explicitly requested via --gui flag
+	if !daemonFlag && guiFlag {
 		go func() {
 			time.Sleep(200 * time.Millisecond)
 			LaunchGUI("BenzCloud – Micro-Enterprise Suite", appURL, 1180, 800)
