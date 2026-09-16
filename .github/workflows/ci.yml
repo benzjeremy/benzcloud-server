@@ -19,14 +19,12 @@ jobs:
           pacman -Sy --noconfirm archlinux-keyring
           pacman -S --noconfirm base-devel git go nodejs npm python-pip || true
 
-      # Go build and test
       - name: Build Go
         run: go build ./... || true
 
       - name: Test Go
         run: go test -race ./... || true
 
-      # Node install, lint, test
       - name: Install Node dependencies
         run: npm ci || true
 
@@ -36,7 +34,6 @@ jobs:
       - name: Test Node
         run: npm test || true
 
-      # Python install, lint, test
       - name: Install Python dependencies
         run: pip install -r requirements.txt || true
 
