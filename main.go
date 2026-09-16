@@ -38,6 +38,7 @@ func main() {
 		domainFlag  string
 		daemonFlag  bool
 		versionFlag bool
+		guiFlag    bool
 	)
 
 	flag.IntVar(&portFlag, "port", 80, "HTTP server port (default 80)")
